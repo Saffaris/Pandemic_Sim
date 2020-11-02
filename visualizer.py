@@ -36,6 +36,12 @@ class Visualizer:
                 col = tuple(newCol)
                 img.putpixel((x, y), col)
 
+            # resize small images
+            if self.width < 300:
+                newWidth = 400
+                newHeight = int(400 * (self.height / self.width))
+                img = img.resize((newWidth, newHeight))
+
             # save pictures of time steps
             img.save('pic/picture' + str(iterator) + '.png')
             animation.append(img)
