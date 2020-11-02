@@ -48,6 +48,5 @@ class Visualizer:
 
         # save all time steps as gif animation
         # imageio.mimsave('gif/' + data['project'] + '.gif', animation)
-        print(len(animation))
         animation[0].save('gif/' + data['project'] + '.gif',
                           save_all=True, append_images=animation[1:], optimize=False, duration=40, loop=0)

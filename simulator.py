@@ -7,20 +7,20 @@ from agent import Agent
 # class to run simulation and create json file with results
 class Simulator:
 
-    def __init__(self, numberOfAgents: int, numberOfInfected: int, timeSteps: int,
-                 maxSpeed: int, borderX: int, borderY: int):
+    def __init__(self, values):
         # Run parameters (can later be altered)
-        self.numberOfAgents = numberOfAgents  # How many persons should be simulated
-        self.numberOfInfected = numberOfInfected  # How many persons are infected from the beginning
-        self.timeSteps = timeSteps  # How many time steps (= 10 seconds) should be simulated
+        self.fileName = values[0]  # Name for the later saved files
+        self.numberOfAgents = int(values[1])  # How many persons should be simulated
+        self.numberOfInfected = int(values[2])  # How many persons are infected from the beginning
+        self.timeSteps = int(values[3])  # How many time steps (= 10 seconds) should be simulated
         # (when all persons are infected the simulation stops early)
-        self.maxSpeed = maxSpeed  # Maximum number of fields a agent can move per timeStep (recommended at least 1)
-        self.borderX = borderX  # How big the area in the x direction will be (-x to x)
-        self.borderY = borderY  # How big the area in the y direction will be (-y to y)
+        self.maxSpeed = int(values[4])  # Maximum number of fields a agent can move per timeStep
+        self.borderX = int(values[5])  # How big the area in the x direction will be (-x to x)
+        self.borderY = int(values[6])  # How big the area in the y direction will be (-y to y)
 
         # Create agents
         self.agents = []
-        infectionCounter = numberOfInfected
+        infectionCounter = self.numberOfInfected
         for iterator in range(0, self.numberOfAgents):
             infection = infectionCounter > 0
             if infection:
@@ -29,10 +29,10 @@ class Simulator:
                 Agent(iterator, random.randint(-self.borderX, self.borderX),
                       random.randint(-self.borderX, self.borderY), infection))
 
-    def runSimulation(self, filename: str):
+    def runSimulation(self):
         # data setup
         idCode = self.numberOfAgents * self.timeSteps
-        data = {'project': filename,
+        data = {'project': self.fileName,
                 'numberOfAgents': self.numberOfAgents,
                 'numberOfInfected': self.numberOfInfected,
                 'timeSteps': self.timeSteps,
@@ -84,5 +84,5 @@ class Simulator:
                 iterator = self.timeSteps + 1
 
         # Save generated data
-        with open('sim/' + filename + '.json', 'w') as outfile:
+        with open('sim/' + self.fileName + '.json', 'w') as outfile:
             json.dump(data, outfile)

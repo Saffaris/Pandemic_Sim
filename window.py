@@ -54,58 +54,6 @@ class Window:
     def show(self):
         self.root.mainloop()
 
-    # checks the given inputs for errors and shows a corresponding message
-    def checkInputs(self):
-        if len(self.fileName.get()) > 0:
-            if Window.tryConvert(self.numOfAgents.get()):
-                noa = int(self.numOfAgents.get())
-                if noa > 0:
-                    if Window.tryConvert(self.startInfected.get()):
-                        si = int(self.startInfected.get())
-                        if 0 < si < noa:
-                            if Window.tryConvert(self.timeSteps.get()):
-                                ts = int(self.timeSteps.get())
-                                if ts > 0:
-                                    if Window.tryConvert(self.maxSpeed.get()):
-                                        ms = int(self.maxSpeed.get())
-                                        if ms > 0:
-                                            if Window.tryConvert(self.fieldWidth.get()):
-                                                width = int(self.fieldWidth.get())
-                                                if width > 0:
-                                                    if Window.tryConvert(self.fieldHeight.get()):
-                                                        height = int(self.fieldHeight.get())
-                                                        if height > 0:
-                                                            return True
-                                                        else:
-                                                            self.error(
-                                                                text="The given height has to be bigger than zero.")
-                                                    else:
-                                                        self.error(text="The given height is not valid.")
-                                                else:
-                                                    self.error(text="The given width has to be bigger than zero.")
-                                            else:
-                                                self.error(text="The given width is not valid.")
-                                        else:
-                                            self.error(text="The given max. speed has to be bigger than zero.")
-                                    else:
-                                        self.error(text="The given max. speed is not valid.")
-                                else:
-                                    self.error(text="The number of time Steps has to be bigger than zero.")
-                            else:
-                                self.error(text="The given number of time steps is not valid.")
-                        else:
-                            self.error(text="The number of infected at the start is not within the boundaries.")
-                    else:
-                        self.error(text="The given number of infected at the start is not valid.")
-                else:
-                    self.error(text="The number of agents has to be bigger than zero.")
-            else:
-                self.error(text="The given number of agents is not valid.")
-        else:
-            self.error(text="The given project name is not valid.")
-
-        return False
-
     # creates error window with given message
     @staticmethod
     def error(text):
@@ -179,3 +127,25 @@ class Window:
 
         # positions the window in the center of the screen
         window.geometry("+{}+{}".format(positionRight, positionDown))
+
+    # checks the given inputs for errors and shows a corresponding message
+    def checkInputs(self, values):
+        if len(str(values[0])) > 0:
+            iterator = 0
+            fieldNames = ("filename", "number of agents", "number of infected", "number of time steps",
+                          "movement speed", "width", "height")
+            for val in values:
+                if iterator > 0:
+                    if Window.tryConvert(val):
+                        if int(val) <= 0:
+                            self.error(text="The " + fieldNames[iterator] + " has to be bigger than zero.")
+                            return False
+                    else:
+                        self.error(text="The given " + fieldNames[iterator] + " is not valid.")
+                        return False
+                iterator += 1
+        else:
+            self.error(text="The given project name is not valid.")
+            return False
+
+        return True

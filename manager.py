@@ -17,14 +17,12 @@ class Manager:
 
     # method called by buttonpress, forwards input information to simulator
     def simulate(self):
-        if self.win.checkInputs():
-            sim = Simulator(numberOfAgents=int(self.win.numOfAgents.get()),
-                            numberOfInfected=int(self.win.startInfected.get()),
-                            timeSteps=int(self.win.timeSteps.get()),
-                            maxSpeed=int(self.win.maxSpeed.get()),
-                            borderX=int(self.win.fieldWidth.get()),
-                            borderY=int(self.win.fieldHeight.get()))
-            sim.runSimulation(self.win.fileName.get())
+        array = (self.win.fileName.get(), self.win.numOfAgents.get(), self.win.startInfected.get(),
+                 self.win.timeSteps.get(), self.win.maxSpeed.get(), self.win.fieldWidth.get(),
+                 self.win.fieldHeight.get())
+        if self.win.checkInputs(array):
+            sim = Simulator(array)
+            sim.runSimulation()
 
     # method called by buttonpress, forwards simulated data to visualizer
     def visualize(self):
@@ -50,7 +48,7 @@ class Manager:
     # loads an old simulation by given project name
     def load(self):
         try:
-            path = 'sim/'+self.win.fileName.get() + '.json'
+            path = 'sim/' + self.win.fileName.get() + '.json'
             with open(path) as json_file:
                 self.data = json.load(json_file)
             return True
